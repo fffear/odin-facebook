@@ -12,15 +12,14 @@ FriendRequest.delete_all
 10.times do
   first_name = Faker::Name.first_name
   last_name = Faker::Name.last_name
-  FactoryBot.create(:user, first_name: first_name, 
-                           last_name: last_name,
-                           email: "#{(first_name + last_name).downcase}@example.com",
-                           password: "password1")
+  User.create(first_name: first_name, 
+              last_name: last_name,
+              email: "#{(first_name + last_name).downcase}@example.com",
+              password: "password1")
 end
 
 (3..10).each do |n|
-  FactoryBot.create(:friend_request, requester_id: User.first.id, requestee_id: n)
+  FriendRequest.create(requester_id: User.first.id, requestee_id: n)
 end
 
-
-FactoryBot.create(:friendship, requester: User.first, requestee: User.second)
+Friendship.create(requester: User.first, requestee: User.second)
