@@ -44,6 +44,7 @@ RSpec.describe User, type: :model do
     it { should have_many(:friends_as_requester).through(:friendships).source(:requestee) }
     it { should have_many(:friends_as_requestee).through(:inverse_friendships).source(:requester) }
     it { should have_many(:posts).dependent(:destroy) }
+    it { should have_many(:likes).dependent(:destroy) }
   end
 
   describe 'callbacks' do
