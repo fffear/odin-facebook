@@ -30,10 +30,15 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  activerecord:
-  models: 
-    friend_request:
-      requestee_id: ""
-  # attributes:
-  #   user:
-  #     email: "Email address"
+  #activerecord:
+  #  models:
+  #    friend_request:
+  #  attributes:
+  #    friend_request:
+  #      requestee_id:
+  #  errors:
+  #    models:
+  #      friend_request:
+  #        attributes:
+  #          requestee_id: 
+  #            #taken: "^Why doesn't this work"

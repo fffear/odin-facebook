@@ -12,6 +12,24 @@
   <body>
     <% if user_signed_in? %>
       Logged in as <strong><%= current_user.email %></strong>.
+      <section>Notifications
+        <ul>
+          <% if current_user.pending_friends_inverse.any? %>
+            <% current_user.pending_friends_inverse.each do |pending_friend_inverse|  %>
+              <li>
+                <%= pending_friend_inverse.full_name %> 
+                <%= button_to("Accept Friend Request",
+                              friendships_path,
+                              params: { requester_id: pending_friend_inverse.id }) %>
+                <%= button_to("Delete Request",
+                              friend_request_path(current_user.friend_requests_received.find_by(requester: pending_friend_inverse)),
+                              method: :delete) %>
+              </li>
+            <% end %>
+          <% end %>
+        </ul>
+      </section>
+
       <%= link_to "Edit profile", edit_user_registration_path %>
       <%= link_to "Logout", destroy_user_session_path, method: :delete %>
     <% else %>

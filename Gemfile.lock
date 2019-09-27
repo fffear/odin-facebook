@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/thethanghn/custom-err-msg.git
+  revision: b913309360995472507ea444c6f1a80315b99d28
+  specs:
+    custom_error_message (1.2.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -279,6 +285,7 @@ DEPENDENCIES
   capybara (>= 2.15)
   chromedriver-helper
   coffee-rails (~> 4.2)
+  custom_error_message!
   devise
   factory_bot_rails
   faker

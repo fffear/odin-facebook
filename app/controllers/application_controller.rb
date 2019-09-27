@@ -1,9 +1,6 @@
 class ApplicationController < ActionController::Base
+  include UsersHelper
   before_action :configure_permitted_parameters, if: :devise_controller?
-
-  def home
-    render 'home/display'
-  end
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [:first_name, :last_name])

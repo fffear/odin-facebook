@@ -39,6 +39,10 @@ RSpec.describe User, type: :model do
     it { should have_many(:friend_requests_received).class_name(:FriendRequest) }
     it { should have_many(:pending_friends).through(:friend_requests).source(:requestee) }
     it { should have_many(:pending_friends_inverse).through(:friend_requests_received).source(:requester) }
+    it { should have_many(:friendships) }
+    it { should have_many(:inverse_friendships).class_name(:Friendship) }
+    it { should have_many(:friends_as_requester).through(:friendships).source(:requestee) }
+    it { should have_many(:friends_as_requestee).through(:inverse_friendships).source(:requester) }
   end
 
   describe 'callbacks' do
@@ -61,11 +65,31 @@ RSpec.describe User, type: :model do
   end
 
   describe 'custom methods' do
+    let(:friendship) { FactoryBot.create(:friendship) }
+
     context '#full_name' do
       it 'should return string with first and last name concatenated' do
         user.save
         expect(user.full_name).to eq("Test User")
       end
     end
+
+    context '#specific_friendship_with' do
+      it 'should return a friendship object and with the user argument as either the requester or requestee' do
+        user_1 = friendship.requester
+        user_2 = friendship.requestee
+        friendship_1 = user_1.specific_friendship_with(user_2)
+        expect(friendship_1).to eq(friendship)
+      end
+    end
+
+    context '#friends' do
+    it 'should return a friends as either the requester or requestee' do
+      user_1 = friendship.requester
+      user_2 = friendship.requestee
+      expect(user_1.friends).to include(user_2)
+      expect(user_2.friends).to include(user_1)
+    end
+  end
   end
 end

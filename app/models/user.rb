@@ -29,15 +29,28 @@ class User < ApplicationRecord
                                      format: { with: /\A[a-zA-Z]+\z/, message: "should only allow letters" }
 
   has_many :friend_requests, { foreign_key: :requester_id, dependent: :destroy }
-  has_many :friend_requests_received, { class_name: :FriendRequest, foreign_key: :requestee_id }
+  has_many :friend_requests_received, { class_name: :FriendRequest, foreign_key: :requestee_id, dependent: :destroy }
   has_many :pending_friends, { through: :friend_requests, source: :requestee }
   has_many :pending_friends_inverse, { through: :friend_requests_received, source: :requester }
+
+  has_many :friendships, { foreign_key: :requester_id, dependent: :destroy }
+  has_many :inverse_friendships, { class_name: :Friendship, foreign_key: :requestee_id, dependent: :destroy }
+  has_many :friends_as_requester, { through: :friendships, source: :requestee }
+  has_many :friends_as_requestee, { through: :inverse_friendships, source: :requester }
   
   before_save :capitalize_first_and_last_name
   before_save :downcase_email
 
   def full_name
     first_name + " " + last_name
+  end
+
+  def friends
+    friends_as_requester + friends_as_requestee
+  end
+
+  def specific_friendship_with(user)
+    friendships.find_by(requestee: user) || inverse_friendships.find_by(requester: user)
   end
 
   # Users can send Friend Requests to other Users.

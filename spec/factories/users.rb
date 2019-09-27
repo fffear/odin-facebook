@@ -23,7 +23,7 @@ FactoryBot.define do
   factory :user do
     first_name { "test" }
     last_name { "user" }
-    email { "TestEmail@example.com" }
+    sequence(:email) { |n| "TestEmail#{n}@example.com" }
     password { 'password' }
 
     factory :invalid_user do

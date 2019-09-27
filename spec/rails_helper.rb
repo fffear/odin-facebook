@@ -34,10 +34,11 @@ rescue ActiveRecord::PendingMigrationError => e
 end
 RSpec.configure do |config|
   config.include AuthFeaturesHelper, type: :feature
+  config.include FriendRequestsAndFriendshipHelper, type: :feature
   #config.include Warden::Test::Helpers
   #config.include Devise::Test::IntegrationHelpers, type: :feature
-  #config.include Devise::Test::ControllerHelpers, type: :controller
-  #config.include Devise::Test::ControllerHelpers, type: :view
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :view
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -77,4 +78,6 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  FactoryBot.use_parent_strategy = false
 end

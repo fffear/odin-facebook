@@ -16,12 +16,11 @@ FriendRequest.delete_all
                            last_name: last_name,
                            email: "#{(first_name + last_name).downcase}@example.com",
                            password: "password1")
-  # User.create(first_name: first_name, 
-  #             last_name: last_name,
-  #             email: "#{(first_name + last_name).downcase}@example.com",
-  #             password: "password1")
 end
 
-(2..10).each do |n|
-  FactoryBot.create(:friend_request, requestee_id: n)
+(3..10).each do |n|
+  FactoryBot.create(:friend_request, requester_id: User.first.id, requestee_id: n)
 end
+
+
+FactoryBot.create(:friendship, requester: User.first, requestee: User.second)
