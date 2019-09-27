@@ -37,6 +37,8 @@ class User < ApplicationRecord
   has_many :inverse_friendships, { class_name: :Friendship, foreign_key: :requestee_id, dependent: :destroy }
   has_many :friends_as_requester, { through: :friendships, source: :requestee }
   has_many :friends_as_requestee, { through: :inverse_friendships, source: :requester }
+
+  has_many :posts, { foreign_key: :author_id, dependent: :destroy }
   
   before_save :capitalize_first_and_last_name
   before_save :downcase_email

@@ -35,14 +35,15 @@ RSpec.describe User, type: :model do
   end
 
   describe 'associations' do
-    it { should have_many(:friend_requests) }
-    it { should have_many(:friend_requests_received).class_name(:FriendRequest) }
+    it { should have_many(:friend_requests).dependent(:destroy) }
+    it { should have_many(:friend_requests_received).class_name(:FriendRequest).dependent(:destroy) }
     it { should have_many(:pending_friends).through(:friend_requests).source(:requestee) }
     it { should have_many(:pending_friends_inverse).through(:friend_requests_received).source(:requester) }
-    it { should have_many(:friendships) }
-    it { should have_many(:inverse_friendships).class_name(:Friendship) }
+    it { should have_many(:friendships).dependent(:destroy) }
+    it { should have_many(:inverse_friendships).class_name(:Friendship).dependent(:destroy) }
     it { should have_many(:friends_as_requester).through(:friendships).source(:requestee) }
     it { should have_many(:friends_as_requestee).through(:inverse_friendships).source(:requester) }
+    it { should have_many(:posts).dependent(:destroy) }
   end
 
   describe 'callbacks' do
