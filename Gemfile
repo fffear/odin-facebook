@@ -24,6 +24,7 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 gem 'devise'
 gem 'custom_error_message', git: 'https://github.com/thethanghn/custom-err-msg.git'
+gem 'faker'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
@@ -46,7 +47,6 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'rails-controller-testing'
   gem 'spring'
-  gem 'faker'
   gem 'guard-rspec'
 end
 
