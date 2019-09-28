@@ -23,5 +23,6 @@ RSpec.describe Post, type: :model do
   describe "associations" do
     it { should belong_to(:author).class_name(:User) }
     it { should have_many(:likes).dependent(:destroy) }
+    it { should have_many(:comments).dependent(:destroy) }
   end
 end

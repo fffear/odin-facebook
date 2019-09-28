@@ -40,6 +40,7 @@ class User < ApplicationRecord
 
   has_many :posts, { foreign_key: :author_id, dependent: :destroy }
   has_many :likes, { dependent: :destroy }
+  has_many :comments, { foreign_key: :author_id, dependent: :destroy }
   
   before_save :capitalize_first_and_last_name
   before_save :downcase_email
