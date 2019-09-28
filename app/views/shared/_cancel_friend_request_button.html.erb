@@ -1,0 +1,5 @@
+<% if user_signed_in? && current_user.pending_friends.include?(user) %>
+  <%= button_to("Cancel Friend Request",
+                friend_request_path(current_user.friend_requests.find_by(requestee: user)),
+                method: :delete)  %>
+<% end %>

@@ -1,0 +1,7 @@
+<% if user_signed_in? &&
+         current_user.friends_as_requester.include?(user) ||
+         current_user.friends_as_requestee.include?(user) %>
+  <%= button_to("Unfriend",
+                friendship_path(current_user.specific_friendship_with(user)),
+                method: :delete) %>
+<% end %>

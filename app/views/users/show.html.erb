@@ -1,21 +1,6 @@
 <h1><%= @user.full_name %></h1>
 <p><%= @user.email %></p>
 
-<% if user_signed_in? &&
-      !current_user?(@user) &&
-      !current_user.pending_friends.include?(@user) &&
-      !current_user.pending_friends_inverse.include?(@user) &&
-      !current_user.friends.include?(@user) %>
-  <%= button_to("Add Friend", friend_requests_path, params: { requestee_id: @user.id } ) %>
-<% elsif user_signed_in? && current_user.pending_friends.include?(@user) %>
-  <%= button_to("Cancel Friend Request",
-                friend_request_path(current_user.friend_requests.find_by(requestee: @user)),
-                method: :delete)  %>
-<% elsif user_signed_in? &&
-         current_user.friends_as_requester.include?(@user) ||
-         current_user.friends_as_requestee.include?(@user) %>
-  <%= button_to("Unfriend",
-                friendship_path(current_user.specific_friendship_with(@user)),
-                method: :delete) %>
-<% else %>
-<% end %>
+<%= render 'shared/add_friend_button', user: @user %>
+<%= render 'shared/cancel_friend_request_button', user: @user %>
+<%= render 'shared/unfriend_button', user: @user %>
