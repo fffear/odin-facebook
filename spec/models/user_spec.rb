@@ -87,12 +87,37 @@ RSpec.describe User, type: :model do
     end
 
     context '#friends' do
-    it 'should return a friends as either the requester or requestee' do
-      user_1 = friendship.requester
-      user_2 = friendship.requestee
-      expect(user_1.friends).to include(user_2)
-      expect(user_2.friends).to include(user_1)
+      it 'should return a friends as either the requester or requestee' do
+        user_1 = friendship.requester
+        user_2 = friendship.requestee
+        expect(user_1.friends).to include(user_2)
+        expect(user_2.friends).to include(user_1)
+      end
     end
-  end
+
+    context '#news_feed' do
+      it 'should return the posts of yourself and all your friends' do
+        user_1 = friendship.requester
+        user_2 = friendship.requestee
+        user_1.posts << FactoryBot.create(:post, author: user_1)
+        user_2.posts << FactoryBot.create(:post, author: user_2)
+        user.save
+        user.posts << FactoryBot.create(:post, author: user)
+        expect(user_1.news_feed.count).to eq(2)
+        expect(user_1.news_feed).to include(user_1.posts[0], user_2.posts[0])
+        expect(user_1.news_feed).to_not include(user.posts[0])
+      end
+
+      it "should eager load author, comments and likes" do
+        user_1 = friendship.requester
+        user_2 = friendship.requestee
+        user_1.posts << FactoryBot.create(:post, author: user_1)
+        user_1.posts[0].comments << FactoryBot.create(:comment, author: user_2, post: user_1.posts[0])
+        expect(user_1.news_feed[0].association(:author).loaded?).to be(true)
+        expect(user_1.news_feed[0].association(:likes).loaded?).to be(true)
+        expect(user_1.news_feed[0].association(:comments).loaded?).to be(true)
+        expect(user_1.news_feed[0].comments[0].association(:author).loaded?).to be(true)
+      end
+    end
   end
 end

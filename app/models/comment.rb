@@ -17,8 +17,14 @@
 #
 
 class Comment < ApplicationRecord
+  include ActionView::Helpers::DateHelper
+  
   validates :content, presence: true, length: { maximum: 8000 }
 
   belongs_to :author, { class_name: :User, foreign_key: :author_id }
   belongs_to :post
+
+  def time_of_creation_as_words
+    "posted " + time_ago_in_words(created_at) + " ago"
+  end
 end

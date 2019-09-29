@@ -5,7 +5,16 @@ Rails.application.routes.draw do
 
   root 'static_pages#home'
 
-  resources :users, only: %i(index show)
+  resources :users, only: %i(index show) do
+    resources :posts, only: %i(create)
+  end
+
+  get '/news_feed', to: 'posts#index'
+  resources :posts, only: %i(destroy) do
+    resources :likes, only: %i(create)
+    resources :comments, only: %i(create)
+  end
+  
   resources :friend_requests, only: %i(create destroy)
   resources :friendships, only: %i(create destroy)
 

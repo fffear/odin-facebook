@@ -19,6 +19,8 @@
 require 'rails_helper'
 
 RSpec.describe Comment, type: :model do
+  let(:comment) { FactoryBot.create(:comment) }
+
   describe "validations" do
     it { should validate_presence_of(:content) }
     it { should validate_length_of(:content).is_at_most(8000) }
@@ -30,5 +32,13 @@ RSpec.describe Comment, type: :model do
     it { should have_db_index(:author_id) }
     it { should have_db_index(:post_id) }
     it { should have_db_index([:post_id, :author_id]) }
+  end
+
+  describe "custom methods" do
+    it "#time_of_creation_as_words" do
+      expect(comment.time_of_creation_as_words).to match(/^posted/)
+      expect(comment.time_of_creation_as_words).to match(/ago$/)
+      expect(comment.time_of_creation_as_words).to match(/less than a minute/)
+    end
   end
 end

@@ -53,6 +53,11 @@ class User < ApplicationRecord
     friends_as_requester + friends_as_requestee
   end
 
+  def news_feed
+    Post.where("author_id IN (?) OR author_id = ?", friends.pluck(:id), id)
+        .includes(:author, :likes, comments: :author)
+  end
+
   def specific_friendship_with(user)
     friendships.find_by(requestee: user) || inverse_friendships.find_by(requester: user)
   end

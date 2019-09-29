@@ -4,3 +4,11 @@
 <%= render 'shared/add_friend_button', user: @user %>
 <%= render 'shared/cancel_friend_request_button', user: @user %>
 <%= render 'shared/unfriend_button', user: @user %>
+
+<% if user_signed_in? && current_user == @user %>
+  <%= form_for(@post, url: user_posts_path(current_user)) do |f| %>
+    <%= f.text_area :content %>
+    <br>
+    <%= f.submit "Post" %>
+  <% end %>
+<% end %>
