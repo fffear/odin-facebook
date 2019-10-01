@@ -1,14 +1,44 @@
 <h1><%= @user.full_name %></h1>
+<%= gravatar_for(@user) %>
 <p><%= @user.email %></p>
 
 <%= render 'shared/add_friend_button', user: @user %>
 <%= render 'shared/cancel_friend_request_button', user: @user %>
 <%= render 'shared/unfriend_button', user: @user %>
 
-<% if user_signed_in? && current_user == @user %>
-  <%= form_for(@post, url: user_posts_path(current_user)) do |f| %>
-    <%= f.text_area :content %>
-    <br>
-    <%= f.submit "Post" %>
+<h2>Posts</h2>
+<% @posts.each do |post| %>
+  <div>
+    <div><%= post.author.full_name %></div>
+    <div><%= post.content %></div>
+    <div><%= post.time_of_creation_as_words %></div>
+    <div>Likes: <%= post.likes.count %></div>
+
+    <% if user_signed_in? %>
+      <% unless post.user_already_liked_post?(current_user) %>
+        <%= button_to("Like Post", post_likes_path(post)) %>
+      <% end %>
+    <% end %>
+  </div>
+  <br>
+
+  <div>
+    <h3>Comments</h3>
+    <% post.comments.each do |comment| %>
+      <div><%= comment.author.full_name %></div>
+      <div><%= comment.content %></div>
+      <div><%= comment.time_of_creation_as_words %></div>
+      <br>
+    <% end %>
+  </div>
+
+  <br>
+  <% if user_signed_in? %>
+    <%= form_for(@comment, url: post_comments_path(post)) do |f| %>
+      <%= f.text_area :content, placeholder: "Add comment here..." %>
+      <br>
+      <%= f.submit "Add Comment" %>
+    <% end %>
   <% end %>
+  <hr>
 <% end %>

@@ -1,0 +1,14 @@
+<h1>All Users</h1>
+<table>
+  <% @users.each do |user| %>
+    <tr>
+      <td>
+        <%= user.full_name %>
+      </td>
+
+      <td>
+        <%= button_to("Add Friend", friend_requests_path, params: { requestee_id: user.id } ) %>
+      </td>
+    </tr>
+  <% end %>
+</table>

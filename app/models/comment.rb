@@ -18,7 +18,8 @@
 
 class Comment < ApplicationRecord
   include ActionView::Helpers::DateHelper
-  
+  default_scope { order(created_at: :desc) }
+
   validates :content, presence: true, length: { maximum: 8000 }
 
   belongs_to :author, { class_name: :User, foreign_key: :author_id }

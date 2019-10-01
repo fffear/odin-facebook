@@ -67,6 +67,29 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe 'scopes' do
+    RSpec::Matchers.define_negated_matcher :be_collection_excluding, :include
+    let(:friendship) { FactoryBot.create(:friendship) }
+
+    context '::not_friends_with' do
+      it 'should return all users who are not friends or who are not pending' do
+        user_1 = friendship.requester
+        user_2 = friendship.requestee
+        user_3 = FactoryBot.create(:user, first_name: "Testone", last_name: "Userone")
+        user_4 = FactoryBot.create(:user)
+        user_5 = FactoryBot.create(:user)
+        user_6 = FactoryBot.create(:user)
+        FactoryBot.create(:friendship, requester: user_6, requestee: user_1)
+        FactoryBot.create(:friend_request, requester: user_4, requestee: user_1)
+        FactoryBot.create(:friend_request, requester: user_1, requestee: user_5)
+        expect(User.not_friends_with(user_1)).to be_collection_excluding(user_4)
+        expect(User.not_friends_with(user_1)).to be_collection_excluding(user_5)
+        expect(User.not_friends_with(user_1)).to be_collection_excluding(user_6)
+        expect(User.not_friends_with(user_1)).to include(user_3)
+      end
+    end
+  end
+
   describe 'custom methods' do
     let(:friendship) { FactoryBot.create(:friendship) }
 

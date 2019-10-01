@@ -45,6 +45,27 @@ class User < ApplicationRecord
   before_save :capitalize_first_and_last_name
   before_save :downcase_email
 
+  # , friend_requests.requester_id AS fr_req, friend_requests.requestee_id AS fr_ree
+  scope :not_friends_with, ->(user) do
+    friends_as_the_requester = "SELECT friendships.requestee_id FROM friendships
+                                WHERE friendships.requester_id = :user_id"
+    friends_as_the_requestee = "SELECT friendships.requester_id FROM friendships
+                                WHERE friendships.requestee_id = :user_id"
+    friend_requests_as_requester = "SELECT friend_requests.requestee_id FROM friend_requests
+                                    WHERE friend_requests.requester_id = :user_id"
+    friend_requests_as_requestee = "SELECT friend_requests.requester_id FROM friend_requests
+                                     WHERE friend_requests.requestee_id = :user_id"
+
+    select("users.*")
+    .joins("LEFT OUTER JOIN friendships ON (friendships.requestee_id = users.id)")
+    .joins("LEFT OUTER JOIN friend_requests ON (friend_requests.requestee_id = users.id)")
+    .where("users.id != :user_id", user_id: user.id)
+    .where("users.id NOT IN (#{friend_requests_as_requester}) AND
+            users.id NOT IN (#{friend_requests_as_requestee}) AND
+            users.id NOT IN (#{friends_as_the_requester}) AND
+            users.id NOT IN (#{friends_as_the_requestee})", user_id: user.id)
+  end
+
   def full_name
     first_name + " " + last_name
   end
