@@ -25,6 +25,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'devise'
 gem 'custom_error_message', git: 'https://github.com/thethanghn/custom-err-msg.git'
 gem 'faker'
+gem 'omniauth-facebook'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
