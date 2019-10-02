@@ -7,7 +7,7 @@ class LikesController < ApplicationController
       flash[:alert] = "Unable to like post"
     end
 
-    redirect_back fallback_location: posts_url
+    redirect_back fallback_location: user_url(Post.find(params[:post_id]).author)
   end
 
 
