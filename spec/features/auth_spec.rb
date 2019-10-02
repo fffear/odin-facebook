@@ -3,6 +3,7 @@ require 'rails_helper'
 feature "the signup process" do
   given(:user) { FactoryBot.build(:user) }
   given(:invalid_user) { FactoryBot.build(:invalid_user) }
+  background(:each) { ActionMailer::Base.deliveries.clear }
 
   scenario "has a new user page" do
     visit new_user_registration_path
@@ -12,7 +13,9 @@ feature "the signup process" do
   feature "valid signup information" do
     scenario "should log in upon successful signup" do
       expect(User.all.count).to eq(0)
+      expect(ActionMailer::Base.deliveries.count).to eq(0)
       sign_up_as(user)
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
       expect(User.all.count).to eq(1)
       expect(page).to have_content "Welcome! You have signed up successfully."
       expect(page).to have_content "Logged in as #{user.email.downcase}"
@@ -22,7 +25,9 @@ feature "the signup process" do
   feature "invalid signup information" do
     scenario "display error message upon unsuccessful signup" do
       expect(User.all.count).to eq(0)
+      expect(ActionMailer::Base.deliveries.count).to eq(0)
       sign_up_as(invalid_user)
+      expect(ActionMailer::Base.deliveries.count).to eq(0)
       expect(User.all.count).to eq(0)
       expect(page).to have_content "2 errors prohibited this user from being saved"
     end

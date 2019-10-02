@@ -26,6 +26,7 @@ gem 'devise'
 gem 'custom_error_message', git: 'https://github.com/thethanghn/custom-err-msg.git'
 gem 'faker'
 gem 'omniauth-facebook'
+
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
@@ -59,6 +60,7 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'pry-rails'
   gem 'spring-commands-rspec'
+  gem 'letter_opener'
 end
 
 group :test do

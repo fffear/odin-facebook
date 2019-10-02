@@ -47,7 +47,6 @@ class User < ApplicationRecord
   before_save :capitalize_first_and_last_name
   before_save :downcase_email
 
-  # , friend_requests.requester_id AS fr_req, friend_requests.requestee_id AS fr_ree
   scope :not_friends_with, ->(user) do
     friends_as_the_requester = "SELECT friendships.requestee_id FROM friendships
                                 WHERE friendships.requester_id = :user_id"
