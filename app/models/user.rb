@@ -67,6 +67,10 @@ class User < ApplicationRecord
             users.id NOT IN (#{friends_as_the_requestee})", user_id: user.id)
   end
 
+  def self.already_signed_up?(auth)
+    where(provider: auth.provider, uid: auth.uid).exists?
+  end
+
   def self.from_omniauth(auth)
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
       user.email = auth.info.email
